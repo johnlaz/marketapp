@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MarketMaster AI - Instant Product Listings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #0a0a0f; color: #e5e5e5; overflow-x: hidden; line-height: 1.6; }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid rgba(201, 162, 39, 0.1);
+      position: sticky;
+      top: 0;
+      background: rgba(10, 10, 15, 0.98);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 800;
+      font-size: 1.3rem;
+      letter-spacing: -1px;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .logo-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .logo-text {
+      background: linear-gradient(90deg, #c9a227 0%, #2dd4bf 50%, #00a8ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-family: 'Playfair Display', serif;
+    }
+
+    nav { display: flex; gap: 2rem; }
+    nav a {
+      color: #999;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.3s;
+      font-family: 'Outfit', sans-serif;
+      letter-spacing: 0.3px;
+    }
+    nav a:hover { color: #c9a227; }
+
+    .hero {
+      padding: 7rem 2rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(45, 212, 191, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -5%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(0, 168, 255, 0.12) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(201, 162, 39, 0.1);
+      border: 1px solid rgba(201, 162, 39, 0.3);
+      color: #c9a227;
+      padding: 0.6rem 1.2rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      letter-spacing: 0.7px;
+      font-family: 'Space Mono', monospace;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: 4.5rem;
+      font-weight: 900;
+      margin-bottom: 1.25rem;
+      letter-spacing: -2px;
+      line-height: 1.05;
+      font-family: 'Playfair Display', serif;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, #2dd4bf 0%, #00a8ff 50%, #c9a227 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-style: italic;
+    }
+
+    .hero-description {
+      font-size: 1.2rem;
+      color: #b0b0b8;
+      margin-bottom: 0.5rem;
+      max-width: 750px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.8;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+    }
+
+    .ai-stack {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 2rem 0 3rem 0;
+      flex-wrap: wrap;
+      font-size: 0.95rem;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .ai-stack .groq {
+      background: rgba(0, 168, 255, 0.15);
+      border: 1px solid rgba(0, 168, 255, 0.3);
+      color: #00a8ff;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .ai-stack .gemini {
+      background: rgba(45, 212, 191, 0.15);
+      border: 1px solid rgba(45, 212, 191, 0.3);
+      color: #2dd4bf;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 4rem;
+    }
+
+    button, .btn {
+      padding: 1rem 2.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      letter-spacing: 0.5px;
+      font-family: 'Outfit', sans-serif;
+      text-transform: uppercase;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #00a8ff 0%, #2dd4bf 100%);
+      color: #0a0a0f;
+      border: 2px solid transparent;
+      font-weight: 800;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 32px rgba(0, 168, 255, 0.35);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #c9a227;
+      border: 2px solid #c9a227;
+      font-weight: 700;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(201, 162, 39, 0.15);
+      border-color: #ffd700;
+      color: #ffd700;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px rgba(201, 162, 39, 0.2);
+    }
+
+    .demo-widget {
+      background: rgba(20, 20, 30, 0.7);
+      border: 2px solid rgba(45, 212, 191, 0.25);
+      border-radius: 12px;
+      padding: 2.5rem;
+      margin: 0 auto;
+      max-width: 550px;
+      backdrop-filter: blur(10px);
+      margin-bottom: 4rem;
+    }
+
+    .demo-title {
+      font-size: 0.85rem;
+      color: #2dd4bf;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 1.5rem;
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+    }
+
+    .demo-input {
+      width: 100%;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1.5px solid rgba(201, 162, 39, 0.25);
+      border-radius: 8px;
+      color: #e5e5e5;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      font-family: 'Space Mono', monospace;
+      transition: all 0.3s;
+    }
+
+    .demo-input::placeholder { color: #555; }
+    .demo-input:focus {
+      outline: none;
+      border-color: #00a8ff;
+      background: rgba(0, 168, 255, 0.08);
+      box-shadow: 0 0 0 3px rgba(0, 168, 255, 0.1);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2.5rem;
+      padding: 4rem 2rem;
+      background: rgba(20, 20, 30, 0.5);
+      margin: 4rem 0;
+      border-top: 1px solid rgba(201, 162, 39, 0.15);
+      border-bottom: 1px solid rgba(201, 162, 39, 0.15);
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #c9a227 0%, #2dd4bf 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.75rem;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .stat-label {
+      color: #888;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      font-family: 'Space Mono', monospace;
+      font-weight: 600;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2.5rem;
+      padding: 5rem 2rem;
+    }
+
+    .feature {
+      background: rgba(20, 20, 30, 0.6);
+      border: 1.5px solid rgba(201, 162, 39, 0.15);
+      border-radius: 12px;
+      padding: 2.5rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #2dd4bf, #00a8ff, transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .feature:hover {
+      border-color: rgba(45, 212, 191, 0.4);
+      background: rgba(20, 20, 30, 0.85);
+      transform: translateY(-6px);
+    }
+
+    .feature:hover::before { opacity: 1; }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1.25rem;
+      display: inline-block;
+      background: linear-gradient(135deg, #00a8ff 0%, #2dd4bf 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .feature h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.75rem;
+      color: #e5e5e5;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+    }
+
+    .feature p {
+      color: #999;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .workflow {
+      padding: 5rem 2rem;
+    }
+
+    .workflow h2 {
+      text-align: center;
+      font-size: 2.8rem;
+      margin-bottom: 4rem;
+      font-family: 'Playfair Display', serif;
+      font-weight: 800;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2.5rem;
+      position: relative;
+    }
+
+    .step {
+      position: relative;
+      padding: 2.5rem;
+      background: rgba(20, 20, 30, 0.6);
+      border-radius: 12px;
+      border: 1.5px solid rgba(201, 162, 39, 0.15);
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .step:hover {
+      border-color: rgba(45, 212, 191, 0.3);
+      background: rgba(20, 20, 30, 0.8);
+    }
+
+    .step-num {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, #00a8ff 0%, #c9a227 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 2rem;
+      color: #0a0a0f;
+      margin: 0 auto 1.5rem;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .step h3 {
+      font-size: 1.4rem;
+      margin-bottom: 0.75rem;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+    }
+
+    .step p {
+      color: #999;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0, 168, 255, 0.1);
+      border: 1px solid rgba(0, 168, 255, 0.3);
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-family: 'Space Mono', monospace;
+      color: #00a8ff;
+      margin: 0.5rem 0;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .comparison {
+      padding: 5rem 2rem;
+      background: rgba(20, 20, 30, 0.4);
+    }
+
+    .comparison h2 {
+      text-align: center;
+      font-size: 2.8rem;
+      margin-bottom: 4rem;
+      font-family: 'Playfair Display', serif;
+      font-weight: 800;
+    }
+
+    .comparison-table {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: rgba(20, 20, 30, 0.7);
+      border: 1.5px solid rgba(201, 162, 39, 0.15);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .comparison-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 1.75rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(201, 162, 39, 0.1);
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .comparison-table th {
+      background: rgba(201, 162, 39, 0.08);
+      color: #c9a227;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .comparison-table .check {
+      color: #2dd4bf;
+      font-weight: 800;
+    }
+
+    .comparison-table .cross {
+      color: #666;
+      font-weight: 800;
+    }
+
+    .cta-final {
+      padding: 5rem 2rem;
+      text-align: center;
+    }
+
+    .cta-box {
+      max-width: 750px;
+      margin: 0 auto;
+      background: rgba(45, 212, 191, 0.08);
+      border: 2px solid rgba(45, 212, 191, 0.25);
+      border-radius: 12px;
+      padding: 4rem 3rem;
+    }
+
+    .cta-box h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1.25rem;
+      font-family: 'Playfair Display', serif;
+      font-weight: 800;
+    }
+
+    .cta-box p {
+      color: #b0b0b8;
+      font-size: 1.1rem;
+      margin-bottom: 2.5rem;
+      line-height: 1.8;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+    }
+
+    footer {
+      padding: 3rem 2rem;
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(201, 162, 39, 0.1);
+      margin-top: 4rem;
+      font-family: 'Space Mono', monospace;
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2.8rem; }
+      .hero { padding: 3.5rem 1rem 2rem; }
+      .hero-description { font-size: 1rem; }
+      nav { display: none; }
+      .cta-group { flex-direction: column; }
+      button, .btn { width: 100%; }
+      .stats { grid-template-columns: 1fr; }
+      .ai-stack { flex-direction: column; gap: 1rem; }
+      .ai-stack span { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">
+      <img src="assets/marketmaster-icon.png" alt="MarketMaster">
+    </div>
+    <div class="logo-text">MARKETMASTER</div>
+  </div>
+  <nav>
+    <a href="#features">Features</a>
+    <a href="#workflow">How It Works</a>
+    <a href="#compare">Comparison</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="badge">⚡ Powered by Intelligence</div>
+    <h1>Product to <span>Post Ready</span><br>in Seconds</h1>
+    <p class="hero-description">Snap a photo. AI identifies it instantly. Generate SEO titles, descriptions, and pricing. Post to any marketplace immediately. The speed of Groq. The creativity of Gemini.</p>
+    
+    <div class="ai-stack">
+      <span class="groq">⚡ GROQ SPEED</span>
+      <span style="color: #888;">×</span>
+      <span class="gemini">✨ GEMINI CREATIVITY</span>
+    </div>
+
+    <div class="cta-group">
+      <button class="btn-primary">Launch MarketMaster</button>
+      <button class="btn-secondary">Watch Demo</button>
+    </div>
+    
+    <div class="demo-widget">
+      <div class="demo-title">Try The AI Magic</div>
+      <input type="text" class="demo-input" placeholder="Vintage leather camera bag, barely used..." value="Vintage leather camera bag">
+      <button class="btn-primary" style="width: 100%; font-family: 'Space Mono', monospace;">Generate Listing →</button>
+      <div style="margin-top: 1rem; font-size: 0.8rem; color: #666; font-family: 'Space Mono', monospace;">
+        Powered by <span style="color: #00a8ff; font-weight: 700;">GROQ</span> + <span style="color: #2dd4bf; font-weight: 700;">GEMINI</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="stat">
+    <div class="stat-number">10x</div>
+    <div class="stat-label">Faster than manual</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">95%</div>
+    <div class="stat-label">AI accuracy</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">1 Click</div>
+    <div class="stat-label">Multi-platform post</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">$$$</div>
+    <div class="stat-label">Maximize profit</div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="feature">
+    <div class="feature-icon">📷</div>
+    <h3>Instant Scan & Identify</h3>
+    <p>Open camera, snap photo. <strong>Groq's lightning-fast vision</strong> instantly recognizes product, brand, model, and market value in milliseconds.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">✨</div>
+    <h3>Creative AI Listings</h3>
+    <p><strong>Gemini's creative engine</strong> generates SEO-optimized titles and descriptions auto-tailored for each platform—Facebook, eBay, Craigslist, OfferUp, Mercari.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">💰</div>
+    <h3>Intelligent Valuation</h3>
+    <p>Real-time market price data powered by <strong>Groq's speed</strong>. Auto-suggest pricing. Competitive analysis. Maximize profit margins.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">📊</div>
+    <h3>Complete Inventory Ledger</h3>
+    <p>Track all listings, sold items, profit margins, and performance in one dashboard. Export to CSV for accounting. Built with precision.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">🔄</div>
+    <h3>Multi-Platform Sync</h3>
+    <p>Write once with <strong>Gemini's creative touch</strong>. Post everywhere. Automatically adapt listings for each marketplace's unique audience.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-icon">🛡️</div>
+    <h3>100% Offline & Secure</h3>
+    <p>Works completely offline. All data stored locally on your device. No cloud vendor lock-in. Full data export anytime. Your data, your control.</p>
+  </div>
+</section>
+
+<section class="workflow" id="workflow">
+  <h2>How The Magic Works</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Snap</h3>
+      <p>Use your phone to photograph the item from any angle. Quality doesn't matter—our AI handles everything.</p>
+      <div class="ai-badge">🚀 Groq-powered</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>Analyze</h3>
+      <p>Groq's vision engine reads the product in milliseconds, extracts specs, checks live market prices, flags opportunities.</p>
+      <div class="ai-badge">⚡ Lightning fast</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>Create</h3>
+      <p>Gemini crafts a complete, SEO-ready listing: title, description, tags, pricing strategy, and platform-specific variants.</p>
+      <div class="ai-badge">✨ Gemini creative</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h3>Post</h3>
+      <p>One click deploys to your choice of marketplaces. Track performance, manage sales, update prices in real time.</p>
+      <div class="ai-badge">🎯 Instant deploy</div>
+    </div>
+  </div>
+</section>
+
+<section class="comparison" id="compare">
+  <h2>MarketMaster vs. The Manual Grind</h2>
+  <div class="comparison-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>MarketMaster<br><span style="font-size: 0.75rem; font-weight: 400;">(Groq + Gemini)</span></th>
+          <th>Manual Listing</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Time per listing</strong></td>
+          <td><span class="check">✓ 10–30 sec</span></td>
+          <td><span class="cross">✗ 10–15 min</span></td>
+        </tr>
+        <tr>
+          <td><strong>AI product ID</strong></td>
+          <td><span class="check">✓ Groq Vision</span></td>
+          <td><span class="cross">✗ Manual research</span></td>
+        </tr>
+        <tr>
+          <td><strong>Creative description</strong></td>
+          <td><span class="check">✓ Gemini-powered</span></td>
+          <td><span class="cross">✗ You write it</span></td>
+        </tr>
+        <tr>
+          <td><strong>Price research</strong></td>
+          <td><span class="check">✓ Real-time (Groq speed)</span></td>
+          <td><span class="cross">✗ Manual lookups</span></td>
+        </tr>
+        <tr>
+          <td><strong>SEO optimization</strong></td>
+          <td><span class="check">✓ Built-in (Gemini)</span></td>
+          <td><span class="cross">✗ You handle it</span></td>
+        </tr>
+        <tr>
+          <td><strong>Multi-platform posting</strong></td>
+          <td><span class="check">✓ One-click sync</span></td>
+          <td><span class="cross">✗ Re-type each site</span></td>
+        </tr>
+        <tr>
+          <td><strong>Profit tracking</strong></td>
+          <td><span class="check">✓ Automatic ledger</span></td>
+          <td><span class="cross">✗ Spreadsheet</span></td>
+        </tr>
+        <tr>
+          <td><strong>Data privacy</strong></td>
+          <td><span class="check">✓ 100% local storage</span></td>
+          <td><span class="cross">✗ Cloud dependent</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="cta-final">
+  <div class="cta-box">
+    <h2>Ready to List Like a Master?</h2>
+    <p>Turn your inventory into revenue in seconds. Whether you're a reseller, small business, or just decluttering—MarketMaster makes it instant. Powered by the speed of Groq and the creativity of Gemini.</p>
+    <button class="btn-primary">Get Started Now</button>
+  </div>
+</section>
+
+<footer>
+  <p>MarketMaster AI — Groq Speed × Gemini Creativity = Unstoppable Listings</p>
+  <p style="margin-top: 1rem; font-size: 0.8rem; color: #555;">© 2026 | Built for speed. Built for creativity. Built for profit.</p>
+</footer>
+
+<script>
+  document.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      if (this.textContent.includes('Launch')) {
+        window.location.href = './app/';
+      } else if (this.textContent.includes('Demo')) {
+        window.location.href = './assets/demo-video.mp4';
+      } else if (this.textContent.includes('Generate')) {
+        const input = document.querySelector('.demo-input');
+        const messages = [
+          '⚡ Analyzing with Groq...',
+          '✨ Generating with Gemini...',
+          '📊 Researching market data...',
+          '🎯 Optimizing for platforms...',
+          '🚀 Ready to post!'
+        ];
+        let i = 0;
+        const btn = this;
+        btn.disabled = true;
+        btn.textContent = messages[0];
+        const interval = setInterval(() => {
+          i++;
+          if (i < messages.length) {
+            btn.textContent = messages[i];
+          } else {
+            clearInterval(interval);
+            btn.textContent = 'Generate Listing →';
+            btn.disabled = false;
+            alert(`✨ Listing generated for: "${input.value}"\n\n🚀 Ready to post to:\n• Facebook Marketplace\n• eBay\n• Craigslist\n• OfferUp\n• Mercari\n\nAll with Groq speed & Gemini creativity!`);
+          }
+        }, 300);
+      } else if (this.textContent.includes('Get Started')) {
+        window.location.href = './app/';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
